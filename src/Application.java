@@ -1,13 +1,10 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class Application implements IQuery {
+public class Application implements IStreamQuery {
     private List<Customer> records = new ArrayList<>();
 
     public List<Customer> loadRecords() {
@@ -43,9 +40,9 @@ public class Application implements IQuery {
 
     // count
     public void executeSQL01(List<Customer> records) {
-        //System.out.println("Anzahl der List ist:");
-        //System.out.println(records.stream().count());
-        //System.out.println(records.size());
+        // System.out.println("Anzahl der List ist:");
+        // System.out.println(records.stream().count());
+        // System.out.println(records.size());
     }
 
     // count, where
@@ -61,26 +58,38 @@ public class Application implements IQuery {
     }
 
     // id, where, in, order by desc limit
-    public void executeSQL05(List<Customer> customers) {
-        System.out.println("Results by SQL:");
-        System.out.println(customers.get(602611).getId());
-        System.out.println(customers.get(330965).getId());
-        System.out.println(customers.get(329280).getId());
-        System.out.println("Results by Lambdas:");
-        customers.stream()
-                .filter(customer -> customer.getTown().getRegion().equals("A"))
-                .filter(customer -> customer.getType().matches("[SL]"))
-                .filter(customer -> customer.getEnergyConsumption0To6() >= 25 &&
+    public List<Integer> executeSQL05(List<Customer> customers) {
+        return customers.stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A") &&
+                        customer.getType().matches("[SL]") &&
+                        customer.getEnergyConsumption0To6() >= 25 &&
                         customer.getEnergyConsumption0To6() <= 50)
                 .sorted((x, y) -> y.getEnergyConsumption0To6() - x.getEnergyConsumption0To6())
-                //.limit(3)
-                .collect(Collectors.toList())
-                .forEach(System.out::println);
+                .limit(3)
+                .map(Customer::getId)
+                .collect(Collectors.toList());
 
     }
 
     // id, where, in, order by desc, order by asc
-    public void executeSQL06(List<Customer> customers) {
+    public List<Integer> executeSQL06(List<Customer> customers) {
+        return customers.stream()
+                .filter(customer -> customer.getTown().getRegion().equals("C") &&
+                        customer.getType().matches("[KL]") &&
+                        customer.getBonusLevel() <= 2 &&
+                        customer.isHasSmartTechnology() &&
+                        customer.getEnergyConsumption0To6() <= 5 &&
+                        customer.getEnergyConsumption6To12() >= 10 &&
+                        customer.getEnergyConsumption6To12() <= 15)
+                .sorted((o1, o2) -> {
+                    int bonusLevelOrder = o2.getBonusLevel() - o1.getBonusLevel();
+                    if (bonusLevelOrder != 0) {
+                        return bonusLevelOrder;
+                    }
+                    return o1.getEnergyConsumption6To12() - o2.getEnergyConsumption6To12();
+                })
+                .map(Customer::getId)
+                .collect(Collectors.toList());
     }
 
     // count, group by
@@ -100,7 +109,11 @@ public class Application implements IQuery {
     }
 
     // sum, where, not in, in, group by
-    public void executeSQL11(List<Customer> customers) {
+    public Map<Boolean, Integer> executeSQL11(List<Customer> customers) {
+        return customers.stream()
+                .filter(customer -> Arrays.asList("B", "C").contains(customer.getTown().getRegion()) &&
+                        Arrays.asList(1, 3).contains(customer.getBonusLevel()) &&
+
     }
 
     // avg, where, in, in, group by
@@ -121,6 +134,8 @@ public class Application implements IQuery {
         executeSQL10(new ArrayList<>(records));
         executeSQL11(new ArrayList<>(records));
         executeSQL12(new ArrayList<>(records));
+
+        executeSQL02(records);
     }
 
     public static void main(String... args) {
