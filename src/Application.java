@@ -1,11 +1,13 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Application {
-    private List<Record> records = new ArrayList<>();
+    private List<Customer> records = new ArrayList<>();
 
-    public List<Record> loadRecords() {
-        List<Record> recordList;
+    public List<Customer> loadRecords() {
+        List<Customer> recordList;
         try {
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -14,7 +16,17 @@ public class Application {
     }
 
     // count
-    public void executeSQL01() {
+    public void executeSQL01(/*List<Customer> records*/) {
+        //System.out.println(records.stream().collect(Collectors.summarizingInt(p->((Integer)p))));
+        List<Integer> values = new ArrayList<>();
+                   values.add(1);
+                   values.add(2);
+                   values.add(3);
+                   values.add(4);
+                   values.add(5);
+        System.out.println("Anzahl der List ist:");
+        System.out.println(values.stream().count());
+        System.out.println(values.size());
     }
 
     // count, where
@@ -78,6 +90,7 @@ public class Application {
     }
 
     public static void main(String... args) {
-
+    Application app = new Application();
+    app.execute();
     }
 }
