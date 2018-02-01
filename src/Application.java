@@ -74,13 +74,13 @@ public class Application implements IStreamQuery {
     // id, where, in, order by desc, order by asc
     public List<Integer> executeSQL06(List<Customer> customers) {
         return customers.stream()
-                .filter(customer -> customer.getTown().getRegion().equals("C") &&
-                        customer.getType().matches("[KL]") &&
-                        customer.getBonusLevel() <= 2 &&
-                        customer.isHasSmartTechnology() &&
-                        customer.getEnergyConsumption0To6() <= 5 &&
-                        customer.getEnergyConsumption6To12() >= 10 &&
-                        customer.getEnergyConsumption6To12() <= 15)
+                .filter(customer -> customer.getTown().getRegion().equals("C")
+                        && customer.getType().matches("[KL]")
+                        && customer.getBonusLevel() <= 2
+                        && customer.isHasSmartTechnology()
+                        && customer.getEnergyConsumption0To6() <= 5
+                        && customer.getEnergyConsumption6To12() >= 10
+                        && customer.getEnergyConsumption6To12() <= 15)
                 .sorted((o1, o2) -> {
                     int bonusLevelOrder = o2.getBonusLevel() - o1.getBonusLevel();
                     if (bonusLevelOrder != 0) {
@@ -111,13 +111,24 @@ public class Application implements IStreamQuery {
     // sum, where, not in, in, group by
     public Map<Boolean, Integer> executeSQL11(List<Customer> customers) {
         return customers.stream()
-                .filter(customer -> Arrays.asList("B", "C").contains(customer.getTown().getRegion()) &&
-                        Arrays.asList(1, 3).contains(customer.getBonusLevel()) &&
-
+                .filter(customer -> !Arrays.asList("B", "C").contains(customer.getTown().getRegion())
+                        && Arrays.asList(1, 3).contains(customer.getBonusLevel())
+                        && customer.getType().equals("M"))
+                .collect(Collectors.groupingBy(Customer::isHasSmartTechnology,
+                         Collectors.summingInt(Customer::getEnergyConsumption6To12)));
     }
 
     // avg, where, in, in, group by
-    public void executeSQL12(List<Customer> customers) {
+    public Map<String, Integer> executeSQL12(List<Customer> customers) {
+        return customers.stream()
+                .filter(customer -> Arrays.asList("A", "C").contains(customer.getTown().getRegion())
+                        && Arrays.asList("L", "M").contains(customer.getType())
+                        && !customer.isHasSmartTechnology())
+                .collect(Collectors.groupingBy(customer -> customer.getTown().getRegion(),
+                         Collectors.averagingInt(Customer::getEnergyConsumption6To12)))
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().intValue()));
     }
 
     public void execute() {
@@ -135,10 +146,9 @@ public class Application implements IStreamQuery {
         executeSQL11(new ArrayList<>(records));
         executeSQL12(new ArrayList<>(records));
 
-        executeSQL02(records);
     }
 
-    public static void main(String... args) {
+    public static void main(String ... args) {
         Application app = new Application();
         app.execute();
     }
