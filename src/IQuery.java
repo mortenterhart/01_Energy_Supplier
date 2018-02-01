@@ -2,7 +2,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.Map;
 
-public interface IStreamQuery {
+public interface IQuery {
 
     long executeSQL01(List<Customer> customers);
 
@@ -24,7 +24,7 @@ public interface IStreamQuery {
 
     Map<String, Long> executeSQL10(List<Customer> customers);
 
-    Map<Boolean, Integer> executeSQL11(List<Customer> customers);
+    Map<Boolean, Long> executeSQL11(List<Customer> customers);
 
-    Map<String, Integer> executeSQL12(List<Customer> customers);
+    Map<String, Long> executeSQL12(List<Customer> customers);
 }

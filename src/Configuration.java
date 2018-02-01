@@ -14,6 +14,7 @@ public enum Configuration {
     public String logFile = userDirectory + fileSeparator + "log" + fileSeparator + "lambda_queries.log";
 
     public PrintWriter logger;
+    public boolean enableLogging = true;
 
     public void initLogger() {
         try {
@@ -23,12 +24,16 @@ public enum Configuration {
         }
     }
 
-    public void logQuery(String lambaExpression, String result) {
+    public void log(String message) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date currentDate = new Date();
-        String dateString = dateFormat.format(currentDate);
-        logger.write(dateString + ": QUERY : " + lambaExpression + lineSeparator);
-        logger.write(dateString + ": RESULT: " + result + lineSeparator);
+        String logMessage = dateFormat.format(new Date()) + message + lineSeparator;
+        logger.write(logMessage);
+        System.out.println(logMessage);
+    }
+
+    public void logQuery(String lambaExpression, String result) {
+        log(": QUERY : " + lambaExpression);
+        log(": RESULT: " + result);
 
     }
 }

@@ -39,7 +39,7 @@ public class Customer {
         return bonusLevel;
     }
 
-    public boolean isHasSmartTechnology() {
+    public boolean hasSmartTechnology() {
         return hasSmartTechnology;
     }
 
