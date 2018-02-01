@@ -134,7 +134,15 @@ public class Application implements IQuery {
 
     // count, where, not in, group by
     public void executeSQL10(List<Customer> customers) {
-
+        System.out.println(
+                customers
+                        .stream()
+                        .filter(customer -> customer.getType().matches("[^AB]")
+                                && customer.isHasSmartTechnology())
+                        .collect(Collectors.groupingBy(
+                                customer -> customer.getTown().getRegion(), Collectors.counting())
+                        )
+        );
     }
 
     // sum, where, not in, in, group by
