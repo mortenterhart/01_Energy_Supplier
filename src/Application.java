@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 public class Application implements IStreamQuery {
     private List<Customer> records = new ArrayList<>();
@@ -38,24 +36,82 @@ public class Application implements IStreamQuery {
         return recordList;
     }
 
+    /*
+     * SQL Query:
+     *     SELECT COUNT(*) FROM data
+     */
+
     // count
-    public void executeSQL01(List<Customer> records) {
-        // System.out.println("Anzahl der List ist:");
-        // System.out.println(records.stream().count());
-        // System.out.println(records.size());
+    public long executeSQL01(List<Customer> customers) {
+        return customers.stream().count();
     }
+
+    /*
+     * SQL Query:
+     *     SELECT COUNT(*) FROM data
+     *         WHERE region = 'A'
+     *         AND type = 'S'
+     */
 
     // count, where
-    public void executeSQL02(List<Customer> customers) {
+    public long executeSQL02(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A"))
+                .filter(customer -> customer.getType().equals("S"))
+                .count();
     }
+
+    /*
+     * SQL Query:
+     *     SELECT COUNT(*) FROM data
+     *         WHERE region = 'A'
+     *         AND type IN ('S', 'L')
+     *         AND energyConsumption0To6 >= 25
+     *         AND energyConsumption0To6 <= 50
+     */
 
     // count, where, in
-    public void executeSQL03(List<Customer> customers) {
+    public long executeSQL03(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A")
+                        && customer.getType().matches("[SL]")
+                        && customer.getEnergyConsumption0To6() >= 25
+                        && customer.getEnergyConsumption0To6() <= 50)
+                .count();
     }
 
+    /*
+     * SQL Query:
+     *     SELECT COUNT(*) FROM data
+     *         WHERE type NOT IN ('L', 'M')
+     *         AND region = 'B'
+     *         AND bonusLevel >= 2
+     *         AND hasSmartTechnology = 'true'
+     *         AND energyConsumption12To18 <= 25
+     */
+
     // count, where, not in
-    public void executeSQL04(List<Customer> customers) {
+    public long executeSQL04(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[^LM]"))
+                .filter(customer -> customer.getTown().getRegion().equals("B"))
+                .filter(customer -> customer.getBonusLevel() >= 2)
+                .filter(customer -> customer.isHasSmartTechnology())
+                .filter(customer -> customer.getEnergyConsumption12To18() <= 25)
+                .count();
     }
+
+    /*
+     * SQL Query:
+     *     SELECT id FROM data
+     *         WHERE region = 'A'
+     *         AND type IN ('S', 'L')
+     *         AND energyConsumption0To6 >= 25
+     *         AND energyConsumption0To6 <= 50
+     */
 
     // id, where, in, order by desc limit
     public List<Integer> executeSQL05(List<Customer> customers) {
@@ -70,6 +126,19 @@ public class Application implements IStreamQuery {
                 .collect(Collectors.toList());
 
     }
+
+    /*
+     * SQL Query:
+     *     SELECT id FROM data
+     *         WHERE region = 'C'
+     *         AND type IN ('K', 'L')
+     *         AND bonusLevel <= 2
+     *         AND hasSmartTechnology = 'true'
+     *         AND energyConsumption0To6 <= 5
+     *         AND energyConsumption6To12 >= 10
+     *         AND energyConsumption6To12 <= 15
+     *         ORDER BY bonusLevel DESC, energyConsumption6To12
+     */
 
     // id, where, in, order by desc, order by asc
     public List<Integer> executeSQL06(List<Customer> customers) {
@@ -92,21 +161,78 @@ public class Application implements IStreamQuery {
                 .collect(Collectors.toList());
     }
 
+    /*
+     * SQL Query:
+     *     SELECT hasSmartTechnology, COUNT(*) FROM data
+     *         GROUP BY hasSmartTechnology
+     */
+
     // count, group by
-    public void executeSQL07(List<Customer> customers) {
+    public Map<Boolean, Long> executeSQL07(List<Customer> customers) {
+        return customers
+                .stream()
+                .collect(Collectors.groupingBy(Customer::isHasSmartTechnology,
+                        Collectors.counting()));
     }
+
+    /*
+     * SQL Query:
+     *     SELECT region, COUNT(*) FROM data
+     *         WHERE energyConsumption0To6 <= 50
+     *         GROUP BY region
+     */
 
     // count, where, group by
-    public void executeSQL08(List<Customer> customers) {
+    public Map<String, Long> executeSQL08(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getEnergyConsumption0To6() <= 50)
+                .collect(Collectors.groupingBy(customer -> customer.getTown().getRegion(),
+                        Collectors.counting()));
     }
+
+    /*
+     * SQL Query:
+     *     SELECT bonusLevel, COUNT(*) FROM data
+     *         WHERE TYPE IN ('L', 'M')
+     *         GROUP BY bonusLevel
+     */
 
     // count, where, in, group by
-    public void executeSQL09(List<Customer> customers) {
+    public Map<Integer, Long> executeSQL09(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[LM]"))
+                .collect(Collectors.groupingBy(Customer::getBonusLevel,
+                        Collectors.counting()));
     }
 
+    /*
+     * SQL Query:
+     *     SELECT region, COUNT(*) FROM data
+     *         WHERE region NOT IN ('A', 'B')
+     *         AND hasSmartTechnology = 'true'
+     */
+
     // count, where, not in, group by
-    public void executeSQL10(List<Customer> customers) {
+    public Map<String, Long> executeSQL10(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[^AB]")
+                        && customer.isHasSmartTechnology())
+                .collect(Collectors.groupingBy(
+                        customer -> customer.getTown().getRegion(), Collectors.counting())
+                );
     }
+
+    /*
+     * SQL Query:
+     *     SELECT hasSmartTechnology, SUM(energyConsumption6To12) FROM data
+     *         WHERE region NOT IN ('B', 'C')
+     *         AND bonusLevel IN (1, 3)
+     *         AND type = 'M'
+     *         GROUP BY hasSmartTechnology
+     */
 
     // sum, where, not in, in, group by
     public Map<Boolean, Integer> executeSQL11(List<Customer> customers) {
@@ -115,8 +241,17 @@ public class Application implements IStreamQuery {
                         && Arrays.asList(1, 3).contains(customer.getBonusLevel())
                         && customer.getType().equals("M"))
                 .collect(Collectors.groupingBy(Customer::isHasSmartTechnology,
-                         Collectors.summingInt(Customer::getEnergyConsumption6To12)));
+                        Collectors.summingInt(Customer::getEnergyConsumption6To12)));
     }
+
+    /*
+     * SQL Query:
+     *     SELECT region, AVG(energyConsumption6To12) FROM data
+     *         WHERE region IN ('A', 'C')
+     *         AND type IN ('L', 'M')
+     *         AND hasSmartTechnology = 'false'
+     *         GROUP BY region
+     */
 
     // avg, where, in, in, group by
     public Map<String, Integer> executeSQL12(List<Customer> customers) {
@@ -125,7 +260,7 @@ public class Application implements IStreamQuery {
                         && Arrays.asList("L", "M").contains(customer.getType())
                         && !customer.isHasSmartTechnology())
                 .collect(Collectors.groupingBy(customer -> customer.getTown().getRegion(),
-                         Collectors.averagingInt(Customer::getEnergyConsumption6To12)))
+                        Collectors.averagingInt(Customer::getEnergyConsumption6To12)))
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().intValue()));
@@ -148,7 +283,7 @@ public class Application implements IStreamQuery {
 
     }
 
-    public static void main(String ... args) {
+    public static void main(String... args) {
         Application app = new Application();
         app.execute();
     }
