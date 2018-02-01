@@ -1,8 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Application implements IQuery {
@@ -41,9 +43,9 @@ public class Application implements IQuery {
 
     // count
     public void executeSQL01(List<Customer> records) {
-        System.out.println("Anzahl der List ist:");
-        System.out.println(records.stream().count());
-        System.out.println(records.size());
+        //System.out.println("Anzahl der List ist:");
+        //System.out.println(records.stream().count());
+        //System.out.println(records.size());
     }
 
     // count, where
@@ -60,6 +62,21 @@ public class Application implements IQuery {
 
     // id, where, in, order by desc limit
     public void executeSQL05(List<Customer> customers) {
+        System.out.println("Results by SQL:");
+        System.out.println(customers.get(602611).getId());
+        System.out.println(customers.get(330965).getId());
+        System.out.println(customers.get(329280).getId());
+        System.out.println("Results by Lambdas:");
+        customers.stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A"))
+                .filter(customer -> customer.getType().matches("[SL]"))
+                .filter(customer -> customer.getEnergyConsumption0To6() >= 25 &&
+                        customer.getEnergyConsumption0To6() <= 50)
+                .sorted((x, y) -> y.getEnergyConsumption0To6() - x.getEnergyConsumption0To6())
+                //.limit(3)
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
+
     }
 
     // id, where, in, order by desc, order by asc
