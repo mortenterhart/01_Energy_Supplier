@@ -80,8 +80,8 @@ public class Application implements IQuery {
         System.out.println(
                 customers
                         .stream()
-                        .filter(customer -> customer.getType().matches("[^LM]"))
-                        .filter(customer -> customer.getTown().getRegion().equals("B"))
+                        .filter(customer -> customer.getType().matches("[^LM]") )
+                        .filter(customer -> customer.getTown().getRegion().equals("B") )
                         .filter(customer -> customer.getBonusLevel() >= 2)
                         .filter(customer -> customer.isHasSmartTechnology())
                         .filter(customer -> customer.getEnergyConsumption12To18() <= 25)
@@ -103,21 +103,38 @@ public class Application implements IQuery {
                 customers
                         .stream()
                         .collect(Collectors.groupingBy(
-                                customer -> customer.isHasSmartTechnology(), Collectors.counting())
+                                customer -> customer.isHasSmartTechnology(), Collectors.counting() )
                         )
         );
     }
 
     // count, where, group by
     public void executeSQL08(List<Customer> customers) {
+        System.out.println(
+                customers
+                        .stream()
+                        .filter(customer -> customer.getEnergyConsumption0To6() <= 50)
+                        .collect(Collectors.groupingBy(
+                                customer -> customer.getTown().getRegion(), Collectors.counting() )
+                        )
+        );
     }
 
     // count, where, in, group by
     public void executeSQL09(List<Customer> customers) {
+        System.out.println(
+                customers
+                        .stream()
+                        .filter(customer -> customer.getType().matches("[LM]") )
+                        .collect(Collectors.groupingBy(
+                                customer -> customer.getBonusLevel(), Collectors.counting())
+                        )
+        );
     }
 
     // count, where, not in, group by
     public void executeSQL10(List<Customer> customers) {
+
     }
 
     // sum, where, not in, in, group by
