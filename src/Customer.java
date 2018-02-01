@@ -23,6 +23,42 @@ public class Customer {
         this.energyConsumption18To24 = energyConsumption18To24;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Town getTown() {
+        return town;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getBonusLevel() {
+        return bonusLevel;
+    }
+
+    public boolean isHasSmartTechnology() {
+        return hasSmartTechnology;
+    }
+
+    public int getEnergyConsumption0To6() {
+        return energyConsumption0To6;
+    }
+
+    public int getEnergyConsumption6To12() {
+        return energyConsumption6To12;
+    }
+
+    public int getEnergyConsumption12To18() {
+        return energyConsumption12To18;
+    }
+
+    public int getEnergyConsumption18To24() {
+        return energyConsumption18To24;
+    }
+
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(id).append(";").append(town.getId()).append(";").append(type).append(";");
