@@ -2,7 +2,7 @@ public class Town {
     private int id;
     private String region;
 
-    public Town(int id,String region) {
+    public Town(int id, String region) {
         this.id = id;
         this.region = region;
     }
