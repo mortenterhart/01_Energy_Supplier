@@ -9,11 +9,11 @@ public class Customer {
     private int energyConsumption12To18;
     private int energyConsumption18To24;
 
-    public Customer(int id,Town town,String type,int bonusLevel,boolean hasSmartTechnology,
-                    int energyConsumption0To6,int energyConsumption6To12,
-                    int energyConsumption12To18,int energyConsumption18To24) {
+    public Customer(int id, Town town, String type, int bonusLevel, boolean hasSmartTechnology,
+                    int energyConsumption0To6, int energyConsumption6To12,
+                    int energyConsumption12To18, int energyConsumption18To24) {
         this.id = id;
-        this.town  = town;
+        this.town = town;
         this.type = type;
         this.bonusLevel = bonusLevel;
         this.hasSmartTechnology = hasSmartTechnology;
