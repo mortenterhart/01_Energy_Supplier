@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Application {
-    private List<Record> records = new ArrayList<>();
+public class Application implements IQuery {
+    private List<Customer> records = new ArrayList<>();
 
-    public List<Record> loadRecords() {
-        List<Record> recordList;
+    public List<Customer> loadRecords() {
+        List<Customer> recordList;
         try {
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }
