@@ -26,14 +26,26 @@ public enum Configuration {
 
     public void log(String message) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String logMessage = dateFormat.format(new Date()) + message + lineSeparator;
+        String logPrefix = "[[INFO] " + dateFormat.format(new Date()) + "]: ";
+        String logMessage = logPrefix + message.replaceAll("\\n", "\n" + logPrefix) + lineSeparator;
         logger.write(logMessage);
-        System.out.println(logMessage);
+        logger.flush();
+        System.out.print(logMessage);
     }
 
-    public void logQuery(String lambaExpression, String result) {
-        log(": QUERY : " + lambaExpression);
-        log(": RESULT: " + result);
+    public void logQuery(String sqlStatement, String lambdaExpression, Object result) {
+        log("SQL statement: " + sqlStatement);
+        log("LambdaStream: " + lambdaExpression);
+        logNewLine();
+        log("Result set:   " + result.toString());
+    }
 
+    public void logNewLine() {
+        log("");
+    }
+
+    public void closeLogger() {
+        logger.flush();
+        logger.close();
     }
 }

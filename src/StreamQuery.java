@@ -45,7 +45,7 @@ public class StreamQuery implements IQuery {
         return customers
                 .stream()
                 .filter(customer -> customer.getTown().getRegion().equals("A")
-                        && customer.getType().matches("[SL]")
+                        && Arrays.asList("S", "L").contains(customer.getType())
                         && customer.getEnergyConsumption0To6() >= 25
                         && customer.getEnergyConsumption0To6() <= 50)
                 .count();
@@ -65,7 +65,7 @@ public class StreamQuery implements IQuery {
     public long executeSQL04(List<Customer> customers) {
         return customers
                 .stream()
-                .filter(customer -> customer.getType().matches("[^LM]")
+                .filter(customer -> !Arrays.asList("L", "M").contains(customer.getType())
                         && customer.getTown().getRegion().equals("B")
                         && customer.getBonusLevel() >= 2
                         && customer.hasSmartTechnology()
@@ -86,7 +86,7 @@ public class StreamQuery implements IQuery {
     public List<Integer> executeSQL05(List<Customer> customers) {
         return customers.stream()
                 .filter(customer -> customer.getTown().getRegion().equals("A")
-                        && customer.getType().matches("[SL]")
+                        && Arrays.asList("S", "L").contains(customer.getType())
                         && customer.getEnergyConsumption0To6() >= 25
                         && customer.getEnergyConsumption0To6() <= 50)
                 .sorted((x, y) -> y.getEnergyConsumption0To6() - x.getEnergyConsumption0To6())
@@ -113,7 +113,7 @@ public class StreamQuery implements IQuery {
     public List<Integer> executeSQL06(List<Customer> customers) {
         return customers.stream()
                 .filter(customer -> customer.getTown().getRegion().equals("C")
-                        && customer.getType().matches("[KL]")
+                        && Arrays.asList("K", "L").contains(customer.getType())
                         && customer.getBonusLevel() <= 2
                         && customer.hasSmartTechnology()
                         && customer.getEnergyConsumption0To6() <= 5
