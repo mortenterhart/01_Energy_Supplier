@@ -1,7 +1,5 @@
 import java.io.*;
-
 import java.util.*;
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,54 +39,41 @@ public class Application implements IStreamQuery {
     }
 
     // count
-
-    public void executeSQL01(List<Customer> customers) {
-        System.out.println("Anzahl der List ist:");
-        System.out.println(
-                customers.
-                        stream().
-                        count()
-        );
-        //System.out.println(records.size());
-
+    public long executeSQL01(List<Customer> customers) {
+        // System.out.println(customers.stream().count());
+        return customers.stream().count();
     }
 
     // count, where
-    public void executeSQL02(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getTown().getRegion().equals("A"))
-                        .filter(customer -> customer.getType().equals("S"))
-                        .count()
-        );
+    public long executeSQL02(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A"))
+                .filter(customer -> customer.getType().equals("S"))
+                .count();
     }
 
     // count, where, in
-    public void executeSQL03(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getTown().getRegion().equals("A")
-                                && customer.getType().matches("[SL]")
-                                && customer.getEnergyConsumption0To6() >= 25
-                                && customer.getEnergyConsumption0To6() <= 50)
-                        .count()
-        );
+    public long executeSQL03(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getTown().getRegion().equals("A")
+                        && customer.getType().matches("[SL]")
+                        && customer.getEnergyConsumption0To6() >= 25
+                        && customer.getEnergyConsumption0To6() <= 50)
+                .count();
     }
 
     // count, where, not in
-    public void executeSQL04(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getType().matches("[^LM]") )
-                        .filter(customer -> customer.getTown().getRegion().equals("B") )
-                        .filter(customer -> customer.getBonusLevel() >= 2)
-                        .filter(customer -> customer.isHasSmartTechnology())
-                        .filter(customer -> customer.getEnergyConsumption12To18() <= 25)
-                        .count()
-        );
+    public long executeSQL04(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[^LM]"))
+                .filter(customer -> customer.getTown().getRegion().equals("B"))
+                .filter(customer -> customer.getBonusLevel() >= 2)
+                .filter(customer -> customer.isHasSmartTechnology())
+                .filter(customer -> customer.getEnergyConsumption12To18() <= 25)
+                .count();
     }
 
     // id, where, in, order by desc limit
@@ -127,60 +112,55 @@ public class Application implements IStreamQuery {
     }
 
     // count, group by
-    public void executeSQL07(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .collect(Collectors.groupingBy(
-                                customer -> customer.isHasSmartTechnology(), Collectors.counting() )
-                        )
-        );
+    public Map<Boolean, Long> executeSQL07(List<Customer> customers) {
+        return customers
+                .stream()
+                .collect(Collectors.groupingBy(
+                        customer -> customer.isHasSmartTechnology(), Collectors.counting())
+                );
     }
 
     // count, where, group by
-    public void executeSQL08(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getEnergyConsumption0To6() <= 50)
-                        .collect(Collectors.groupingBy(
-                                customer -> customer.getTown().getRegion(), Collectors.counting() )
-                        )
-        );
+    public Map<String, Long> executeSQL08(List<Customer> customers) {
+
+        return customers
+                .stream()
+                .filter(customer -> customer.getEnergyConsumption0To6() <= 50)
+                .collect(Collectors.groupingBy(
+                        customer -> customer.getTown().getRegion(), Collectors.counting())
+                );
     }
 
     // count, where, in, group by
-    public void executeSQL09(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getType().matches("[LM]") )
-                        .collect(Collectors.groupingBy(
-                                customer -> customer.getBonusLevel(), Collectors.counting())
-                        )
-        );
+    public Map<Integer, Long> executeSQL09(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[LM]"))
+                .collect(Collectors.groupingBy(
+                        customer -> customer.getBonusLevel(), Collectors.counting())
+                );
     }
 
     // count, where, not in, group by
-    public void executeSQL10(List<Customer> customers) {
-        System.out.println(
-                customers
-                        .stream()
-                        .filter(customer -> customer.getType().matches("[^AB]")
-                                && customer.isHasSmartTechnology())
-                        .collect(Collectors.groupingBy(
-                                customer -> customer.getTown().getRegion(), Collectors.counting())
-                        )
-        );
+    public Map<String, Long> executeSQL10(List<Customer> customers) {
+        return customers
+                .stream()
+                .filter(customer -> customer.getType().matches("[^AB]")
+                        && customer.isHasSmartTechnology())
+                .collect(Collectors.groupingBy(
+                        customer -> customer.getTown().getRegion(), Collectors.counting())
+                );
     }
 
+    public void executeSQL11(List<Customer> customers) {
+    }
     // sum, where, not in, in, group by
-    public Map<Boolean, Integer> executeSQL11(List<Customer> customers) {
-        return customers.stream()
-                .filter(customer -> Arrays.asList("B", "C").contains(customer.getTown().getRegion()) &&
-                        Arrays.asList(1, 3).contains(customer.getBonusLevel()) &&
-
-    }
+    // public Map<Boolean, Integer> executeSQL11(List<Customer> customers) {
+    //return customers.stream()
+    //       .filter(customer -> Arrays.asList("B", "C").contains(customer.getTown().getRegion()) &&
+    //Arrays.asList(1, 3).contains(customer.getBonusLevel()) &&
+    //      return
+    //  }
 
     // avg, where, in, in, group by
     public void executeSQL12(List<Customer> customers) {
