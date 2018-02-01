@@ -41,7 +41,6 @@ public class Application implements IQuery {
 
     // count
     public void executeSQL01(List<Customer> records) {
-
         System.out.println("Anzahl der List ist:");
         System.out.println(records.stream().count());
         System.out.println(records.size());
