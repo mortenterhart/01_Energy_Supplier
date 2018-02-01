@@ -40,15 +40,24 @@ public class Application implements IQuery {
     }
 
     // count
-    public void executeSQL01(List<Customer> records) {
+    public void executeSQL01(List<Customer> customers) {
 
         System.out.println("Anzahl der List ist:");
-        System.out.println(records.stream().count());
+        System.out.println(
+                customers.
+                stream().
+                count()
+        );
         System.out.println(records.size());
     }
 
     // count, where
     public void executeSQL02(List<Customer> customers) {
+        System.out.println(
+                customers
+                .stream()
+                .filter( customer -> customer.getTown())
+        );
     }
 
     // count, where, in
