@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -44,27 +45,48 @@ public class Application implements IQuery {
         System.out.println("Anzahl der List ist:");
         System.out.println(
                 customers.
-                stream().
-                count()
+                        stream().
+                        count()
         );
-        System.out.println(records.size());
+        //System.out.println(records.size());
     }
 
     // count, where
     public void executeSQL02(List<Customer> customers) {
         System.out.println(
                 customers
-                .stream()
-                .filter( customer -> customer.getTown())
+                        .stream()
+                        .filter(customer -> customer.getTown().getRegion().equals("A"))
+                        .filter(customer -> customer.getType().equals("S"))
+                        .count()
         );
     }
 
     // count, where, in
     public void executeSQL03(List<Customer> customers) {
+        System.out.println(
+                customers
+                        .stream()
+                        .filter(customer -> customer.getTown().getRegion().equals("A")
+                                && customer.getType().matches("[SL]")
+                                && customer.getEnergyConsumption0To6() >= 25
+                                && customer.getEnergyConsumption0To6() <= 50)
+                        .count()
+        );
     }
 
     // count, where, not in
     public void executeSQL04(List<Customer> customers) {
+        System.out.println(
+                customers
+                        .stream()
+                        .filter(customer -> customer.getType().matches("[^LM]"))
+                        .filter(customer -> customer.getTown().getRegion().equals("B"))
+                        .filter(customer -> customer.getBonusLevel() >= 2)
+                        .filter(customer -> customer.isHasSmartTechnology())
+                        .filter(customer -> customer.getEnergyConsumption12To18() <= 25)
+                        .count()
+        );
     }
 
     // id, where, in, order by desc limit
@@ -77,6 +99,13 @@ public class Application implements IQuery {
 
     // count, group by
     public void executeSQL07(List<Customer> customers) {
+        System.out.println(
+                customers
+                        .stream()
+                        .collect(Collectors.groupingBy(
+                                customer -> customer.isHasSmartTechnology(), Collectors.counting())
+                        )
+        );
     }
 
     // count, where, group by
