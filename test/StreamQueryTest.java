@@ -14,7 +14,7 @@ public class StreamQueryTest {
     @BeforeClass
     public static void loadCustomers() {
         streamQuery = new StreamQuery();
-        customers   = new Application().loadRecords();
+        customers   = CSVRecordImport.loadRecordsFromCSV(Configuration.instance.recordsFile);
     }
 
     @Test
