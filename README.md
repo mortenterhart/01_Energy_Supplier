@@ -9,7 +9,10 @@ Transformation von 12 SQL-Abfragen in Lambdas und Streams.
 * CSV-Import der Datensätze aus `data/customers.csv`
 * Anlegung eines Logs mit vollständigen SQL-Befehlen und ihren
   äquivalenten Lambda-Streams (`log/lambda_queries.log`)
-* 
+* Ausführung von Lambda-Streams mit gleichen Ergebnissen wie
+  SQL-Befehle
+* Tests für Lambda-Streams mit Vergleich der Ergebnisse der
+  SQL-Befehle
 
 ## Wichtige Hinweise:
 * Implementierung einer technisch einwandfrei lauffähigen Applikation in Java 8.
