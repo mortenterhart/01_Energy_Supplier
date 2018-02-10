@@ -1,6 +1,11 @@
+import csv.CSVRecordImport;
+import main.Configuration;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Assert;
+import query.IQuery;
+import query.StreamQuery;
+import record.Customer;
 
 import java.util.Arrays;
 import java.util.HashMap;

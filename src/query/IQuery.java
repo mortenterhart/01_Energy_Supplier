@@ -1,3 +1,7 @@
+package query;
+
+import record.Customer;
+
 import java.util.Map;
 import java.util.List;
 

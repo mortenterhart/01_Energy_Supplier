@@ -1,3 +1,8 @@
+package csv;
+
+import record.Customer;
+import record.Town;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

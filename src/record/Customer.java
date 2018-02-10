@@ -1,3 +1,5 @@
+package record;
+
 public class Customer {
     private int id;
     private Town town;

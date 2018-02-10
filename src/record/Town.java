@@ -1,3 +1,5 @@
+package record;
+
 public class Town {
     private int id;
     private String region;
@@ -17,7 +19,7 @@ public class Town {
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{ Town : ").append("id = ").append(id).append(", ");
+        stringBuilder.append("{ record.Town : ").append("id = ").append(id).append(", ");
         stringBuilder.append("region = ").append(region).append(" }");
         return stringBuilder.toString();
     }

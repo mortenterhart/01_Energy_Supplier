@@ -1,3 +1,10 @@
+package main;
+
+import csv.CSVRecordImport;
+import query.IQuery;
+import query.StreamQuery;
+import record.Customer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +93,7 @@ public class Application {
                     "                        && customer.getEnergyConsumption0To6() <= 50)\n" +
                     "                .sorted((x, y) -> y.getEnergyConsumption0To6() - x.getEnergyConsumption0To6())\n" +
                     "                .limit(3)\n" +
-                    "                .map(Customer::getId)\n" +
+                    "                .map(record.Customer::getId)\n" +
                     "                .collect(Collectors.toList())", resultList);
             Configuration.instance.logNewLine();
             query++;
@@ -115,7 +122,7 @@ public class Application {
                     "                    }\n" +
                     "                    return o1.getEnergyConsumption6To12() - o2.getEnergyConsumption6To12();\n" +
                     "                })\n" +
-                    "                .map(Customer::getId)\n" +
+                    "                .map(record.Customer::getId)\n" +
                     "                .collect(Collectors.toList())", resultList);
             Configuration.instance.logNewLine();
             query++;
@@ -124,7 +131,7 @@ public class Application {
             logQuery(query, "SELECT hasSmartTechnology, COUNT(*) FROM data\n" +
                     "    GROUP BY hasSmartTechnology", "customers\n" +
                     "                .stream()\n" +
-                    "                .collect(Collectors.partitioningBy(Customer::hasSmartTechnology,\n" +
+                    "                .collect(Collectors.partitioningBy(record.Customer::hasSmartTechnology,\n" +
                     "                        Collectors.counting()))", resultMap1);
             Configuration.instance.logNewLine();
             query++;
@@ -146,7 +153,7 @@ public class Application {
                     "    GROUP BY bonusLevel", "customers\n" +
                     "                .stream()\n" +
                     "                .filter(customer -> Arrays.asList(\"L\", \"M\").contains(customer.getType()))\n" +
-                    "                .collect(Collectors.groupingBy(Customer::getBonusLevel,\n" +
+                    "                .collect(Collectors.groupingBy(record.Customer::getBonusLevel,\n" +
                     "                        Collectors.counting()))", resultMap3);
             Configuration.instance.logNewLine();
             query++;
@@ -173,8 +180,8 @@ public class Application {
                     "                .filter(customer -> !Arrays.asList(\"B\", \"C\").contains(customer.getTown().getRegion())\n" +
                     "                        && Arrays.asList(1, 3).contains(customer.getBonusLevel())\n" +
                     "                        && customer.getType().equals(\"M\"))\n" +
-                    "                .collect(Collectors.partitioningBy(Customer::hasSmartTechnology,\n" +
-                    "                        Collectors.summingLong(Customer::getEnergyConsumption6To12)))", resultMap5);
+                    "                .collect(Collectors.partitioningBy(record.Customer::hasSmartTechnology,\n" +
+                    "                        Collectors.summingLong(record.Customer::getEnergyConsumption6To12)))", resultMap5);
             Configuration.instance.logNewLine();
             query++;
 
@@ -188,7 +195,7 @@ public class Application {
                     "                        && Arrays.asList(\"L\", \"M\").contains(customer.getType())\n" +
                     "                        && !customer.hasSmartTechnology())\n" +
                     "                .collect(Collectors.groupingBy(customer -> customer.getTown().getRegion(),\n" +
-                    "                        Collectors.averagingInt(Customer::getEnergyConsumption6To12)))\n" +
+                    "                        Collectors.averagingInt(record.Customer::getEnergyConsumption6To12)))\n" +
                     "                .entrySet()\n" +
                     "                .stream()\n" +
                     "                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().longValue()))", resultMap6);
